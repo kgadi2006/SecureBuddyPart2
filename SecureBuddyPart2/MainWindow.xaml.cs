@@ -1,4 +1,5 @@
-﻿using System;
+﻿using demo;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace demo
-{//start of namespace
+namespace SecureBuddyPart2
+{
+    //start of namespace
     public partial class MainWindow : Window
     {//start of class
         ArrayList reply = new ArrayList();

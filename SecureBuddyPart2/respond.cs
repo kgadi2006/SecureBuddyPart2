@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace demo
+namespace SecureBuddyPart2
 {//start of namespace
     public class respond
     {//start of class
@@ -396,4 +396,5 @@ namespace demo
 
 
     }//End of class
+
 }//end of namespace
