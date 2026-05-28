@@ -59,6 +59,7 @@
     <Compile Include="Clean_input.cs" />
     <Compile Include="Interest_handler.cs" />
     <Compile Include="respond.cs" />
+    <Compile Include="voice_greeting.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
