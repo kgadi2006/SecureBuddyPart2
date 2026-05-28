@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace SecureBuddyPart2
 {//start of namespace
-    public class AI_Check
+    public class chat_bot
     {//start of class
         ArrayList reply = new ArrayList();
         ArrayList ignore = new ArrayList();
 
-        public AI_Check(ArrayList replies, ArrayList ignores)
+        public chat_bot(ArrayList replies, ArrayList ignores)
         {//start of contsructor
             reply = replies;
             ignore = ignores;

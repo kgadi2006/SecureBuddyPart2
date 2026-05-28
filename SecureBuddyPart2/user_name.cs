@@ -1,23 +1,8 @@
-﻿using SecureBuddyPart2;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SecureBuddyPart2
-{
-    //start of namespace
+{//start of namespace
     public partial class MainWindow : Window
     {//start of class
         ArrayList reply = new ArrayList();
@@ -29,9 +14,9 @@ namespace SecureBuddyPart2
 
         int counting = 0;
 
-        chat_bot ai;
+        AI_Check ai;
 
-        Interest_handler interestsHandler;
+        Interest_handler interests;
 
         Clean_input clean;
 
@@ -41,9 +26,9 @@ namespace SecureBuddyPart2
 
             new respond(reply, ignore);
 
-            ai = new chat_bot(reply, ignore);
+            ai = new AI_Check(reply, ignore);
 
-            interestsHandler = new Interest_handler();
+            interests = new Interest_handler();
 
             clean = new Clean_input();
 
@@ -91,7 +76,7 @@ namespace SecureBuddyPart2
                 string[] words = questions.Split(' ');
 
                 string interest_message =
-                    interestsHandler.save_interest(
+                    interests.save_interest(
                         words,
                         ignore,
                         username);
@@ -120,7 +105,7 @@ namespace SecureBuddyPart2
             if (counting == 3)
             {
                 string reminder =
-                    interestsHandler.reminder(username);
+                    interests.reminder(username);
 
                 if (!string.IsNullOrWhiteSpace(reminder))
                 {
@@ -134,6 +119,5 @@ namespace SecureBuddyPart2
                 counting += 1;
             }
         }
-    }//end of class
+    }//end of class  
 }//end of namespace
-
