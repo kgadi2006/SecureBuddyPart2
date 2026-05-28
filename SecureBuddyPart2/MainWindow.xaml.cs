@@ -29,7 +29,7 @@ namespace SecureBuddyPart2
 
         int counting = 0;
 
-        AI_Check ai;
+        chat_bot ai;
 
         Interest_handler interests;
 
@@ -41,7 +41,7 @@ namespace SecureBuddyPart2
 
             new respond(reply, ignore);
 
-            ai = new AI_Check(reply, ignore);
+            ai = new chat_bot(reply, ignore);
 
             interests = new Interest_handler();
 
