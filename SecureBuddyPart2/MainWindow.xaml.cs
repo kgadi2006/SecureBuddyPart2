@@ -34,6 +34,7 @@ namespace SecureBuddyPart2
         Interest_handler interestsHandler;
 
         Clean_input clean;
+        private string tempName;
 
         public MainWindow()
         {
@@ -60,29 +61,32 @@ namespace SecureBuddyPart2
         }
 
         private void submit_name(object sender, RoutedEventArgs e)
-        {
-            username =
-                check_name.submit_name(usernames_input, chats);
+        {//start of submit name method
+            username = check_name.submit_name(usernames_input, chats);
+            if (string.IsNullOrWhiteSpace(username))
 
+            {//start of if statement
+
+                return;
+            }//end of if statement
+            
             username_grid.Visibility = Visibility.Hidden;
-
             chat_grid.Visibility = Visibility.Visible;
-        }
+        }//end of submit name method
 
         private void send(object sender, RoutedEventArgs e)
         {
-            string rawQuestion =
-                question.Text.ToString().Trim();
+            string rawQuestion = question.Text.ToString().Trim();
 
             if (string.IsNullOrWhiteSpace(rawQuestion))
             {
+               
                 error_method("SecureBuddy", "Please enter a question.");
 
                 return;
             }
 
-            string questions =
-                clean.RemoveSpecialCharacters(rawQuestion);
+            string questions = clean.RemoveSpecialCharacters(rawQuestion);
 
             error_method(username, rawQuestion);
 
@@ -101,18 +105,56 @@ namespace SecureBuddyPart2
 
             auto_show_interest();
 
-            string response =
-                ai.ai_check(questions, username);
+            string response = ai.ai_check(questions, username);
 
             error_method("SecureBuddy", response);
 
             question.Clear();
         }
 
-        private void error_method(string v1, string v2)
+        private void error_method(string name, string message)
         {
-            chats.Items.Add(v1 + ": " + v2);
+            Border messageBorder = new Border
+            {
+                Margin = new Thickness(0, 2, 0, 2),
+                Padding = new Thickness(5, 3, 5, 3),
+                CornerRadius = new CornerRadius(5),
+                BorderThickness = new Thickness(1)
+            };
 
+            if (name.ToLower().Contains("securebuddy"))
+            {
+                messageBorder.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                messageBorder.BorderBrush = Brushes.Black;
+            }
+            else
+            {
+                messageBorder.Background = Brushes.Black;
+                messageBorder.BorderBrush = Brushes.White;
+            }
+
+            TextBlock messageText = new TextBlock
+            {
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(2)
+            };
+
+            messageText.Inlines.Add(new Run
+            {
+                Text = name + ": ",
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.Cyan
+            });
+
+            messageText.Inlines.Add(new Run
+            {
+                Text = message,
+                Foreground = Brushes.White
+            });
+
+            messageBorder.Child = messageText;
+
+            chats.Items.Add(messageBorder);
         }
 
         private void auto_show_interest()

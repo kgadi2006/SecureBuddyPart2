@@ -1,123 +1,159 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace SecureBuddyPart2
 {//start of namespace
-    public partial class MainWindow : Window
-    {//start of class
-        ArrayList reply = new ArrayList();
-        ArrayList ignore = new ArrayList();
 
-        user_name check_name = new user_name();
+    public class user_name
+    { //start of class
+        public string submit_name(TextBox user_name, ListView chats)
+        {//start of contsructor
 
-        string username = string.Empty;
+            //temp variables
+            string filename = "user_names.txt";
 
-        int counting = 0;
-
-        AI_Check ai;
-
-        Interest_handler interests;
-
-        Clean_input clean;
-
-        public MainWindow()
-        {
-            InitializeComponent();
-
-            new respond(reply, ignore);
-
-            ai = new AI_Check(reply, ignore);
-
-            interests = new Interest_handler();
-
-            clean = new Clean_input();
-
-            voice_greeting greet = new voice_greeting();
-
-            greet.greet();
-        }
-
-        private void proceed(object sender, RoutedEventArgs e)
-        {
-            home_grid.Visibility = Visibility.Hidden;
-
-            username_grid.Visibility = Visibility.Visible;
-        }
-
-        private void submit_name(object sender, RoutedEventArgs e)
-        {
-            username =
-                check_name.submit_name(usernames_input, chats);
-
-            username_grid.Visibility = Visibility.Hidden;
-
-            chat_grid.Visibility = Visibility.Visible;
-        }
-
-        private void send(object sender, RoutedEventArgs e)
-        {
-            string rawQuestion =
-                question.Text.ToString().Trim();
-
-            if (string.IsNullOrWhiteSpace(rawQuestion))
+            //check if the filename exists or not , then auto create
+            string name = user_name.Text.Trim();
+            if (string.IsNullOrWhiteSpace(name))
             {
-                error_method("SecureBuddy", "Please enter a question.");
+                MessageBox.Show("Please enter a valid username.", "SecureBuddy Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
 
-                return;
+                return "";
             }
 
-            string questions =
-                clean.RemoveSpecialCharacters(rawQuestion);
+            //temp variable
+            bool found = check_name(name);
 
-            error_method(username, rawQuestion);
+            //check if the user is found or not and write the name in a text file
+            if (!found)
+            {//start of if
+                //write the name in a text file
+                File.AppendAllText(filename, name + "\n");
+                //then welcome the user
+                error_method("SecureBuddy", "Hey " + name + "  welcome to SecureBuddy ", chats);
 
-            if (questions.Contains("interested"))
+            }//end of if
+            else
+            {//start of else
+
+                //welcome the user back
+                error_method("SecureBuddy ", "Hey " + name + " welcome back, how can i help you today", chats);
+
+
+            }//end of else
+
+
+            //return name
+            return name;
+
+
+
+        }//end of contsructor
+
+        //method to check name of the user
+        private Boolean check_name(string name)
+        {//start
+
+            //temp variable
+            string filename = "user_names.txt";
+
+            bool found_name = false;
+
+
+            //store or get all the names in the text file and store in an 1D array
+            string[] names = File.ReadAllLines(filename);
+
+            //foreach to search the name of the user
+            foreach (string name_found in names)
+            { //start of loop
+
+                //if statement to check for the username
+                if (name_found.ToLower() == name.ToLower())
+                {//start if
+
+                    //found_name set to true
+                    found_name = true;
+
+                }//end of if
+
+            }//end of the loop
+
+
+
+
+
+            //return the status of found or not [ true or false ]
+            return found_name;
+
+        }//end check method
+
+
+
+        //error method
+        private void error_method(string name, string message, ListView chats)
+        {//star of error mehtod
+
+            // Create a border for chats
+            Border messageBorder = new Border
             {
-                string[] words = questions.Split(' ');
+                Margin = new Thickness(0, 2, 0, 2),
+                Padding = new Thickness(5, 3, 5, 3),
+                CornerRadius = new CornerRadius(5)
+            };
 
-                string interest_message =
-                    interests.save_interest(
-                        words,
-                        ignore,
-                        username);
-
-                error_method("SecureBuddy", interest_message);
-            }
-
-            auto_show_interest();
-
-            string response =
-                ai.ai_check(questions, username);
-
-            error_method("SecureBuddy", response);
-
-            question.Clear();
-        }
-
-        private void error_method(string v1, string v2)
-        {
-            chats.Items.Add(v1 + ": " + v2);
-
-        }
-
-        private void auto_show_interest()
-        {
-            if (counting == 3)
-            {
-                string reminder =
-                    interests.reminder(username);
-
-                if (!string.IsNullOrWhiteSpace(reminder))
-                {
-                    error_method("SecureBuddy", reminder);
-                }
-
-                counting = 0;
+            // Set different background for user vs bot
+            if (name.ToLower().Contains("securebuddy") || name.ToLower().Contains("chat"))
+            {// Light blue
+                messageBorder.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                messageBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
             }
             else
-            {
-                counting += 1;
+            {    // Light gray
+                messageBorder.Background = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                messageBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             }
-        }
-    }//end of class  
+            messageBorder.BorderThickness = new Thickness(1);
+
+            TextBlock messageText = new TextBlock
+            {
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(2)
+            };
+
+            // Set color based on sender
+            Brush nameColor = (name.ToLower().Contains("securebuddy") || name.ToLower().Contains("chat")) ?
+                              Brushes.Cyan : Brushes.DarkGreen;
+
+            Brush messageColor = Brushes.Black;
+
+            messageText.Inlines.Add(new Run
+            {
+                Text = name + ": ",
+                Foreground = nameColor,
+                FontWeight = FontWeights.Bold
+            });
+
+            messageText.Inlines.Add(new Run
+            {
+                Text = message,
+                Foreground = messageColor
+            });
+
+            messageBorder.Child = messageText;
+            chats.Items.Add(messageBorder);
+
+        }//end of error method
+
+
+
+
+    }//end of class
+
+
 }//end of namespace

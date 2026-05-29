@@ -15,7 +15,7 @@ namespace SecureBuddyPart2
 
             //replace the \bin\Debug\ from the path with greeting.wav
 
-            string auto_path = AppDomain.CurrentDomain.BaseDirectory.Replace(@"\bin\Debug\", @"\greeting.wav");
+            string auto_path = AppDomain.CurrentDomain.BaseDirectory.Replace(@"\bin\Debug\", @"\welcome.wav");
 
             //create an instance for the soundPlayer class
             SoundPlayer greetMe = new SoundPlayer(auto_path);

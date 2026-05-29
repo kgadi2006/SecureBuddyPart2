@@ -27,7 +27,7 @@
             <TextBlock
                 Text="Welcome to SecureBuddy, click below to get started"
                 Height="20"
-                Width="280"
+                Width="310"
                 TextAlignment="Center"
                 Margin="0,30,0,0"
                 FontFamily="Arial Rounded MT Bold"
